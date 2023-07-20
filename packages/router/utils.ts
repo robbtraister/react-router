@@ -1461,7 +1461,7 @@ export const defer: DeferFunction = (data, init = {}) => {
 
 export type RedirectFunction = (
   url: string,
-  init?: number | ResponseInit
+  init?: number | (ResponseInit & { reloadDocument?: boolean })
 ) => Response;
 
 /**
@@ -1478,22 +1478,14 @@ export const redirect: RedirectFunction = (url, init = 302) => {
 
   let headers = new Headers(responseInit.headers);
   headers.set("Location", url);
+  if (responseInit.reloadDocument) {
+    headers.set("X-Remix-Reload-Document", "true");
+  }
 
   return new Response(null, {
     ...responseInit,
     headers,
   });
-};
-
-/**
- * A redirect response that will force a document reload to the new location.
- * Sets the status code and the `Location` header.
- * Defaults to "302 Found".
- */
-export const redirectWithReload: RedirectFunction = (url, init) => {
-  let response = redirect(url, init);
-  response.headers.set("X-Remix-Reload-Document", "true");
-  return response;
 };
 
 /**

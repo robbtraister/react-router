@@ -87,7 +87,6 @@ export {
   matchRoutes,
   parsePath,
   redirect,
-  redirectWithReload,
   renderMatches,
   resolvePath,
   useActionData,
